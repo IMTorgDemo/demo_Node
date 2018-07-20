@@ -1,0 +1,67 @@
+<table class="ak-table">
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Subtotal</th>
+    <th>Taxes</th>
+    <th>Shipping</th>
+    <th>Discounts</th>
+    <th>Total</th>
+    <th>Status</th>
+    <th>Created</th>
+    <th>Address</th>
+    <th>Change Shipping</th>
+    <th>Cancel/Request Return</th>
+  </tr>
+  {{#each orders}}
+    <tr>
+      <td><a href="/user/orders/{{this.id}}">{{this.id}}</a></td>
+      <td>{{this.email}}</td>
+      <td>{{fmt_price this.billing.price.subtotal}}</td>
+      <td>{{fmt_price this.billing.price.taxes}}</td>
+      <td>{{fmt_price this.billing.price.shipping}}</td>
+      <td>{{fmt_price this.billing.price.discount}}</td>
+      <td>{{fmt_price this.billing.price.total}}</td>
+      <td>{{this.status}}</td>
+      <td>{{fmt_date this.date_created}}</td>
+      <td><a href="/user/addresses">{{this.shipping.address.id}}</a></td>
+      <td>{{#if this.user}}<a href="/user/orders/{{this.id}}?change_shipping=1" {{#ifCond status '!=' 'paid'}}class="ak-disabled"{{/ifCond}}>Change Shipping</a>{{/if}}</td>
+      <td>
+        {{#if this.user}}
+        {{#ifCond this.status '==' 'paid'}}
+          <a href="/user/orders/{{this.id}}/cancel">Cancel Order</a>
+        {{else}}
+          <a href="/user/orders/{{this.id}}/return"
+            {{#ifCond this.status '!=' 'shipped'}}{{#ifCond this.status '!=' 'delivered'}}{{#ifCond this.status '!=' 'expecting_return'}}class="ak-disabled"{{/ifCond}}{{/ifCond}}{{/ifCond}}
+          >Request a Return</a>
+        {{/ifCond}}
+        {{/if}}
+      </td>
+    </tr>
+  {{else}}
+    <tr>
+      <td><a href="/user/orders/{{id}}">{{id}}</a></td>
+      <td>{{email}}</td>
+      <td>{{fmt_price this.billing.price.subtotal}}</td>
+      <td>{{fmt_price this.billing.price.taxes}}</td>
+      <td>{{fmt_price this.billing.price.shipping}}</td>
+      <td>{{fmt_price this.billing.price.discount}}</td>
+      <td>{{fmt_price this.billing.price.total}}</td>
+      <td>{{status}}</td>
+      <td>{{fmt_date date_created}}</td>
+      <td><a href="/user/addresses">{{this.shipping.address.id}}</a></td>
+      <td>{{#if user}}<a href="/user/orders/{{id}}?change_shipping=1" {{#ifCond status '!=' 'paid'}}class="ak-disabled"{{/ifCond}}>Change Shipping</a>{{/if}}</td>
+      <td>
+        {{#if user}}
+        {{#ifCond status '==' 'paid'}}
+          <a href="/user/orders/{{id}}/cancel">Cancel Order</a>
+        {{else}}
+          <a href="/user/orders/{{id}}/return"
+            {{#ifCond status '!=' 'shipped'}}{{#ifCond status '!=' 'delivered'}}{{#ifCond status '!=' 'expecting_return'}}class="ak-disabled"{{/ifCond}}{{/ifCond}}{{/ifCond}}
+          >Request a Return</a>
+        {{/ifCond}}
+        {{/if}}
+      </td>
+    </tr>
+  {{/each}}
+</table>
